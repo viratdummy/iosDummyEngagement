@@ -127,3 +127,50 @@ class ActionItemsTableVC: UIViewController, UITableViewDelegate, UITableViewData
     }
 }
 
+
+
+3. Bonus
+
+   override func viewDidLoad() {
+    super.viewDidLoad()
+
+    // Step 1: Import the module where ActionItemView and ActionItemViewDelegate are declared
+    // Assume ActionItemView is declared in a module named "CustomViews"
+    import CustomViews
+
+    // Step 2: Create an instance of ActionItemView
+    let actionItemView = ActionItemView()
+
+    // Step 3: Set HomeVC as the delegate of ActionItemView
+    actionItemView.delegate = self
+
+    // Step 4: Implement the required methods of ActionItemViewDelegate in HomeVC
+    // For example:
+    extension HomeVC: ActionItemViewDelegate {
+        func actionItemViewDidSomething(_ actionItemView: ActionItemView) {
+            // Handle the action in HomeVC
+            print("ActionItemView did something!")
+        }
+    }
+
+    // Step 5: Add ActionItemView to the view hierarchy if necessary
+    // Assuming you want to add it as a subview
+    view.addSubview(actionItemView)
+
+    // Step 6: Layout and configure ActionItemView as needed
+    // Assuming you want to set its frame and other properties
+    actionItemView.frame = CGRect(x: 100, y: 100, width: 200, height: 100)
+
+    // Additional configuration if needed
+
+    // Multiline print statement to display the steps
+    print("""
+    Delegation mechanism setup:
+    1. Import CustomViews module
+    2. Create an instance of ActionItemView
+    3. Set HomeVC as the delegate of ActionItemView
+    4. Implement required methods of ActionItemViewDelegate in HomeVC
+    5. Add ActionItemView to the view hierarchy
+    6. Layout and configure ActionItemView
+    """)
+}
