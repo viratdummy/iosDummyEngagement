@@ -48,4 +48,82 @@ class HomeVC: UIViewController {
         signInBTN.isEnabled = !(usernameTF.text?.isEmpty ?? true) && !(passwordTF.text?.isEmpty ?? true)
     }
 }
- 
+
+
+
+
+
+2. ActionItemsTableVC
+
+
+ import UIKit
+
+class ActionItemsTableVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    // Outlets
+    @IBOutlet weak var tableView: UITableView!
+    
+    // Data model
+    var todoItems = ["Task 1", "Task 2", "Task 3"]
+    var archivedItems = ["Task 4", "Task 5"]
+    
+    // MARK: - View Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Set delegate and data source for table view
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        // Set navigation item title
+        navigationItem.title = "Hello, admin"
+        
+        // Register custom cell if needed
+        // tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "CustomCell")
+    }
+    
+    // MARK: - Table View Data Source
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2 // One section for todo items, one for archived items
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return section == 0 ? "To Do" : "Archived"
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return section == 0 ? todoItems.count : archivedItems.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let item = indexPath.section == 0 ? todoItems[indexPath.row] : archivedItems[indexPath.row]
+        cell.textLabel?.text = item
+        cell.imageView?.image = indexPath.section == 0 ? UIImage(systemName: "arrow.right.circle.fill") : UIImage(systemName: "checkmark.circle.fill")
+        return cell
+    }
+    
+    // MARK: - Table View Delegate
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let actionTitle = indexPath.section == 0 ? "Archive" : "Move to To Do"
+        let action = UIContextualAction(style: .destructive, title: actionTitle) { (action, view, completionHandler) in
+            // Perform action based on section
+            if indexPath.section == 0 {
+                // Archive action item
+                let item = self.todoItems.remove(at: indexPath.row)
+                self.archivedItems.append(item)
+            } else {
+                // Move archived item back to todo list
+                let item = self.archivedItems.remove(at: indexPath.row)
+                self.todoItems.append(item)
+            }
+            self.tableView.reloadData()
+            completionHandler(true)
+        }
+        return UISwipeActionsConfiguration(actions: [action])
+    }
+}
+
